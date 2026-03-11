@@ -26,7 +26,7 @@ public class CropSenseService {
             command.add(jsonInput);
 
             ProcessBuilder pb = new ProcessBuilder(command);
-            pb.directory(new java.io.File("c:/Users/Sarvadnya/OneDrive/Documents/Krishinext-SpringBoot"));
+            pb.directory(new java.io.File("."));
             Process process = pb.start();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));

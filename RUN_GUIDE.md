@@ -1,88 +1,62 @@
-# KrishiNext Run Guide
+# KrishiNext: Step-by-Step Run Guide
 
-Follow these steps to set up and run the KrishiNext platform (React + Spring Boot) on your local machine.
+Follow these exact steps to get the project running on your local machine.
 
----
+## 📋 1. Prerequisites (Installation)
+If you haven't already, you must install these tools. **After installing any tool, you MUST restart your Terminal/VS Code for the changes to take effect.**
 
-## 📋 Prerequisites
-Confirm you have the following installed:
-- **Java 17 or higher**
-- **Node.js (v18+) & npm**
-- **Maven**
-- **MongoDB** (Local instance or MongoDB Atlas URI)
-- **Python 3.x** (Required for CropSense AI feature)
-
----
-
-## 🛠️ 1. Backend Setup (Spring Boot)
-
-1. **Navigate to the backend directory**:
-   ```bash
-   cd backend
-   ```
-
-2. **Configure Environment Variables**:
-   Open `src/main/resources/application.properties` and update the following:
-   - `spring.data.mongodb.uri`: Your MongoDB connection string.
-   - `jwt.secret`: A secure random string for token signing.
-   - `gemini.api.key`: Your Google Gemini API key.
-
-3. **Install Dependencies & Build**:
-   ```bash
-   mvn clean install
-   ```
-
-4. **Run the Application**:
-   ```bash
-   mvn spring-boot:run
-   ```
-   *The backend will start on `http://localhost:8080`.*
+1.  **Java 17**: [Download from Oracle](https://www.oracle.com/java/technologies/downloads/#java17) or use `winget install Microsoft.OpenJDK.17`
+2.  **Maven**: [Download from Apache](https://maven.apache.org/download.cgi) or use `winget install Apache.Maven`
+3.  **Node.js (v18+)**: [Download from Nodejs.org](https://nodejs.org/) or use `winget install OpenJS.NodeJS.LTS`
+4.  **MongoDB**: [Download Community Server](https://www.mongodb.com/try/download/community) and ensure it is running on `localhost:27017`.
+5.  **Python 3.x**: [Download from Python.org](https://www.python.org/) (Required for AI features).
 
 ---
 
-## 💻 2. Frontend Setup (React)
+## 🛠️ 2. Backend Setup (Spring Boot)
 
-1. **Navigate to the frontend directory**:
-   ```bash
-   cd ../frontend
-   ```
-
-2. **Install Dependencies**:
-   ```bash
-   npm install
-   ```
-
-3. **Configure Environment**:
-   Ensure `.env` contains:
-   ```env
-   VITE_API_BASE_URL=http://localhost:8080
-   ```
-
-4. **Start the Development Server**:
-   ```bash
-   npm run dev
-   ```
-   *The frontend will be available at `http://localhost:5173` (or the port shown in your terminal).*
+1.  **Open a Terminal** in the `backend` folder:
+    ```bash
+    cd backend
+    ```
+2.  **Verify Environment**:
+    Type `java -version` and `mvn -version`. If they don't work, restart your terminal.
+3.  **Run the Backend**:
+    ```bash
+    mvn spring-boot:run
+    ```
+    *The backend is ready when you see "Started KrishiNextApplication" and it will be at `http://localhost:8080`.*
 
 ---
 
-## 🤖 3. AI Module Setup (Python)
+## 💻 3. Frontend Setup (React)
 
-The **CropSense AI** feature requires a Python environment.
-- Ensure `python` is in your system PATH.
-- The backend will automatically execute `scripts/cropsense_predict.py` when you request a prediction from the dashboard.
+1.  **Open a NEW Terminal** in the `frontend` folder:
+    ```bash
+    cd frontend
+    ```
+2.  **Install Dependencies**:
+    ```bash
+    npm install
+    ```
+3.  **Run the Frontend**:
+    ```bash
+    npm run dev
+    ```
+    *Open the link shown in the terminal (usually `http://localhost:5173`).*
 
 ---
 
-## 🔄 Real-time Features (WebSocket)
-- The platform uses STOMP over WebSocket.
-- Confirm your browser console shows "Connected to WebSocket" after logging in.
-- Note: This feature works best with a direct browser connection (Vercel may block WebSockets in production).
+## 🤖 4. AI & Real-time Features
+- **CropSense AI**: Ensure `python` is in your PATH. The backend calls `scripts/cropsense_predict.py` automatically.
+- **WebSockets**: Real-time stock updates will work automatically while running locally.
 
 ---
 
 ## 🚀 Troubleshooting
-- **'mvn' is not recognized**: I have automatically triggered a Maven installation for you using `winget`. **Please restart your terminal or VS Code** to refresh the system PATH, then try running the command again.
-- **CORS Errors**: Ensure the `setAllowedOrigins("*")` in `WebSocketConfig.java` and `api.js` base URL match your port.
-- **MongoDB Connection**: Verify your IP is whitelisted in MongoDB Atlas if using a cloud database.
-- **Python Path**: If the AI prediction fails, ensure `python` (not `python3`) is the command used in `CropSenseService.java` or update it to match your system.
+- **Port 8080 already in use**: Kill any existing Java processes or change the port in `application.properties`.
+- **MongoDB Connection**: Ensure your local MongoDB is running. If using Atlas, update the URI in `application.properties`.
+- **Missing Code Fixes**: I have already fixed the following in your code:
+    - Fixed hardcoded file paths in `CropSenseService.java`.
+    - Added missing imports in `AuthService.java` and `SecurityConfig.java`.
+    - Corrected the frontend API port in `.env`.

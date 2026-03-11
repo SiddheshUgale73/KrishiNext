@@ -1,6 +1,7 @@
 package com.krishinext.controllers;
 
 import com.krishinext.models.User;
+import com.krishinext.models.Seller;
 import com.krishinext.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
