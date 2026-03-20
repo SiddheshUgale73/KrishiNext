@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +28,7 @@ public class AnalyticsService {
                 unwind("cropDetail"),
                 group("cropDetail.name").sum("orderQty").as("totalQuantity"),
                 project("totalQuantity").and("_id").as("cropName"),
-                sort(org.springframework.data.domain.Sort.Direction.DESC, "totalQuantity"),
+                sort(Direction.DESC, "totalQuantity"),
                 limit(10));
 
         AggregationResults<CropTradeStats> results = mongoTemplate.aggregate(agg, "orders", CropTradeStats.class);
@@ -34,7 +36,7 @@ public class AnalyticsService {
     }
 
     public long getTotalCropListings() {
-        return mongoTemplate.count(new org.springframework.data.mongodb.core.query.Query(), Crop.class);
+        return mongoTemplate.count(new Query(), Crop.class);
     }
 
     public List<Map> getBuyerDemandByCategory() {
@@ -43,7 +45,7 @@ public class AnalyticsService {
                 unwind("cropDetail"),
                 group("cropDetail.category").count().as("orderCount"),
                 project("orderCount").and("_id").as("category"),
-                sort(org.springframework.data.domain.Sort.Direction.DESC, "orderCount"));
+                sort(Direction.DESC, "orderCount"));
 
         AggregationResults<Map> results = mongoTemplate.aggregate(agg, "orders", Map.class);
         return results.getMappedResults();
@@ -60,7 +62,7 @@ public class AnalyticsService {
                         .and("sellerDetail.brandName").as("sellerBrand")
                         .andExpression("orderQty * cropDetail.pricePerUnit").as("revenue"),
                 group("sellerId", "sellerBrand").sum("revenue").as("totalRevenue"),
-                sort(org.springframework.data.domain.Sort.Direction.DESC, "totalRevenue"));
+                sort(Direction.DESC, "totalRevenue"));
 
         AggregationResults<SellerRevenueStats> results = mongoTemplate.aggregate(agg, "orders",
                 SellerRevenueStats.class);

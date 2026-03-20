@@ -2,6 +2,8 @@ package com.krishinext.services;
 
 import com.krishinext.models.User;
 import com.krishinext.models.Seller;
+import com.krishinext.dto.JwtResponse;
+import com.krishinext.dto.LoginRequest;
 import com.krishinext.repositories.UserRepository;
 import com.krishinext.repositories.SellerRepository;
 import com.krishinext.security.JwtUtils;
@@ -36,7 +38,7 @@ public class AuthService {
         return sellerRepository.save(seller);
     }
 
-    public com.krishinext.dto.JwtResponse login(com.krishinext.dto.LoginRequest loginRequest) {
+    public JwtResponse login(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
@@ -46,7 +48,7 @@ public class AuthService {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
 
-        return new com.krishinext.dto.JwtResponse(jwt, userDetails.getUsername(), role);
+        return new JwtResponse(jwt, userDetails.getUsername(), role);
     }
 
     public boolean verifyUser(String token) {

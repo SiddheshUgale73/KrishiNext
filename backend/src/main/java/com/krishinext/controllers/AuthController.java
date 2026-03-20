@@ -2,6 +2,8 @@ package com.krishinext.controllers;
 
 import com.krishinext.models.User;
 import com.krishinext.models.Seller;
+import com.krishinext.dto.JwtResponse;
+import com.krishinext.dto.LoginRequest;
 import com.krishinext.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<com.krishinext.dto.JwtResponse> login(
-            @RequestBody com.krishinext.dto.LoginRequest loginRequest) {
+    public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(authService.login(loginRequest));
     }
 

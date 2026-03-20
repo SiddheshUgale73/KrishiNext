@@ -28,6 +28,8 @@
     "recharts": "^2.12.2",
     "redux": "^4.2.1",
     "redux-persist": "^6.0.0",
+    "sockjs-client": "^1.6.1",
+    "@stomp/stompjs": "^7.0.0",
     "socket.io-client": "^4.7.4",
     "vite-plugin-mkcert": "^1.16.0",
     "yarn": "^1.22.19"

@@ -1,7 +1,7 @@
 package com.krishinext.controllers;
 
-import com.krishinext.models.Product;
-import com.krishinext.services.ProductService;
+import com.krishinext.models.Crop;
+import com.krishinext.services.CropService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
@@ -14,26 +14,26 @@ import java.util.List;
 @RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductController {
-    private final ProductService productService;
+    private final CropService cropService;
 
     @PostMapping
-    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
-        return ResponseEntity.ok(productService.addProduct(product));
+    public ResponseEntity<Crop> addProduct(@RequestBody Crop crop) {
+        return ResponseEntity.ok(cropService.addCrop(crop));
     }
 
     @GetMapping("/category/{category}")
-    public ResponseEntity<Page<Product>> getProductsByCategory(
+    public ResponseEntity<Page<Crop>> getProductsByCategory(
             @PathVariable String category,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(productService.getProductsByCategory(category, page, size));
+        return ResponseEntity.ok(cropService.getCropsByCategory(category, page, size));
     }
 
     @PostMapping("/filter-by-location")
-    public ResponseEntity<List<Product>> filterByLocation(
-            @RequestBody List<Product> products,
+    public ResponseEntity<List<Crop>> filterByLocation(
+            @RequestBody List<Crop> crops,
             @RequestParam double lat,
             @RequestParam double lng) {
-        return ResponseEntity.ok(productService.filterDeliverable(products, new GeoJsonPoint(lng, lat)));
+        return ResponseEntity.ok(cropService.filterDeliverable(crops, new GeoJsonPoint(lng, lat)));
     }
 }
